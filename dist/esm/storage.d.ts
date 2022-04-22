@@ -12,47 +12,47 @@ export declare type StorageSchemaAddOptions = {
     readonly type: string;
     readonly schema: libschema.Schema;
 };
-export declare const StorageSchemaAddOptionsSchema: libschema.Schema;
+export declare const StorageSchemaAddOptionsSchema: libschema.Schema<StorageSchemaAddOptions>;
 export declare type StorageSchemaRemoveOptions = {
     readonly type: string;
 };
-export declare const StorageSchemaRemoveOptionsSchema: libschema.Schema;
+export declare const StorageSchemaRemoveOptionsSchema: libschema.Schema<StorageSchemaRemoveOptions>;
 export declare type StorageCreateOptions<T = any> = {
     readonly type: string;
     readonly name: string;
     readonly payload: T;
 };
-export declare const StorageCreateOptionsSchema: libschema.Schema;
+export declare const StorageCreateOptionsSchema: libschema.Schema<StorageCreateOptions>;
 export declare type StorageUpdateOptions<T = any> = {
     readonly type: string;
     readonly name: string;
     readonly payload: T;
 };
-export declare const StorageUpdateOptionsSchema: libschema.Schema;
+export declare const StorageUpdateOptionsSchema: libschema.Schema<StorageUpdateOptions>;
 export declare type StorageDeleteOptions = {
     readonly type: string;
     readonly name: string;
 };
-export declare const StorageDeleteOptionsSchema: libschema.Schema;
+export declare const StorageDeleteOptionsSchema: libschema.Schema<StorageDeleteOptions>;
 export declare type StorageExistsOptions = {
     readonly type: string;
     readonly name: string;
 };
-export declare const StorageExistsOptionsSchema: libschema.Schema;
+export declare const StorageExistsOptionsSchema: libschema.Schema<StorageExistsOptions>;
 export declare type StorageListOptions = {
     readonly type: string;
 };
-export declare const StorageListOptionsSchema: libschema.Schema;
+export declare const StorageListOptionsSchema: libschema.Schema<StorageListOptions>;
 export declare type StorageLookupOptions = {
     readonly type: string;
     readonly name: string;
 };
-export declare const StorageLookupOptionsSchema: libschema.Schema;
+export declare const StorageLookupOptionsSchema: libschema.Schema<StorageLookupOptions>;
 export declare type StorageGetOptions = {
     readonly type: string;
     readonly name: string;
 };
-export declare const StorageGetOptionsSchema: libschema.Schema;
+export declare const StorageGetOptionsSchema: libschema.Schema<StorageGetOptions>;
 export declare type Storage = {
     readonly create: <T>(options: StorageCreateOptions<T>) => Promise<T>;
     readonly update: <T>(options: StorageUpdateOptions<T>) => Promise<T>;
@@ -80,5 +80,5 @@ export declare type StorageOptions = {
     };
     readonly schemas?: StorageSchemaAddOptions[];
 };
-export declare const StorageOptionsSchema: libschema.Schema;
+export declare const StorageOptionsSchema: libschema.Schema<StorageOptions>;
 export declare const createStorage: (options: StorageOptions) => Storage;

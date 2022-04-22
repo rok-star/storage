@@ -19,7 +19,7 @@ export type StorageSchemaAddOptions = {
     readonly schema: libschema.Schema;
 }
 
-export const StorageSchemaAddOptionsSchema: libschema.Schema = {
+export const StorageSchemaAddOptionsSchema: libschema.Schema<StorageSchemaAddOptions> = {
     type: 'object',
     props: {
         type: { type: 'string', matches: TYPE_REGEXP },
@@ -31,7 +31,7 @@ export type StorageSchemaRemoveOptions = {
     readonly type: string;
 }
 
-export const StorageSchemaRemoveOptionsSchema: libschema.Schema = {
+export const StorageSchemaRemoveOptionsSchema: libschema.Schema<StorageSchemaRemoveOptions> = {
     type: 'object',
     props: {
         type: { type: 'string', matches: TYPE_REGEXP }
@@ -44,7 +44,7 @@ export type StorageCreateOptions<T = any> = {
     readonly payload: T;
 }
 
-export const StorageCreateOptionsSchema: libschema.Schema = {
+export const StorageCreateOptionsSchema: libschema.Schema<StorageCreateOptions> = {
     type: 'object',
     props: {
         type: { type: 'string', matches: TYPE_REGEXP },
@@ -59,7 +59,7 @@ export type StorageUpdateOptions<T = any> = {
     readonly payload: T;
 }
 
-export const StorageUpdateOptionsSchema: libschema.Schema = {
+export const StorageUpdateOptionsSchema: libschema.Schema<StorageUpdateOptions> = {
     type: 'object',
     props: {
         type: { type: 'string', matches: TYPE_REGEXP },
@@ -73,7 +73,7 @@ export type StorageDeleteOptions = {
     readonly name: string;
 }
 
-export const StorageDeleteOptionsSchema: libschema.Schema = {
+export const StorageDeleteOptionsSchema: libschema.Schema<StorageDeleteOptions> = {
     type: 'object',
     props: {
         type: { type: 'string', matches: TYPE_REGEXP },
@@ -86,7 +86,7 @@ export type StorageExistsOptions = {
     readonly name: string;
 }
 
-export const StorageExistsOptionsSchema: libschema.Schema = {
+export const StorageExistsOptionsSchema: libschema.Schema<StorageExistsOptions> = {
     type: 'object',
     props: {
         type: { type: 'string', matches: TYPE_REGEXP },
@@ -98,7 +98,7 @@ export type StorageListOptions = {
     readonly type: string;
 }
 
-export const StorageListOptionsSchema: libschema.Schema = {
+export const StorageListOptionsSchema: libschema.Schema<StorageListOptions> = {
     type: 'object',
     props: {
         type: { type: 'string', matches: TYPE_REGEXP }
@@ -110,7 +110,7 @@ export type StorageLookupOptions = {
     readonly name: string;
 }
 
-export const StorageLookupOptionsSchema: libschema.Schema = {
+export const StorageLookupOptionsSchema: libschema.Schema<StorageLookupOptions> = {
     type: 'object',
     props: {
         type: { type: 'string', matches: TYPE_REGEXP },
@@ -123,7 +123,7 @@ export type StorageGetOptions = {
     readonly name: string;
 }
 
-export const StorageGetOptionsSchema: libschema.Schema = {
+export const StorageGetOptionsSchema: libschema.Schema<StorageGetOptions> = {
     type: 'object',
     props: {
         type: { type: 'string', matches: TYPE_REGEXP },
@@ -160,7 +160,7 @@ export type StorageOptions = {
     readonly schemas?: StorageSchemaAddOptions[];
 }
 
-export const StorageOptionsSchema: libschema.Schema = {
+export const StorageOptionsSchema: libschema.Schema<StorageOptions> = {
     type: 'object',
     props: {
         driver: {
@@ -278,7 +278,7 @@ export const createStorage = (options: StorageOptions): Storage => {
             throw new Error(`schema "${options_.type}" not found`);
         }
     }
-    const lookup = async <T>(options_: StorageLookupOptions) => {
+    const lookup = async (options_: StorageLookupOptions) => {
         libschema.assert(options_, StorageLookupOptionsSchema);
         const schema = schemaList.find(s => s.type === options_.type);
         if (schema) {
@@ -287,7 +287,7 @@ export const createStorage = (options: StorageOptions): Storage => {
                 try {
                     const raw = await driver.read(path);
                     const json = JSON.parse(raw);
-                    const ret = libschema.assert<T>(json, schema.schema);
+                    const ret = libschema.assert(json, schema.schema);
                     return ret;
                 } catch (e) {
                     throw new Error(`failed to read payload "${options_.type}/${options_.name}": ${e.message}`);
@@ -308,7 +308,7 @@ export const createStorage = (options: StorageOptions): Storage => {
             throw new Error(`schema "${options_.type}" not found`);
         }
     }
-    const get = async <T>(options_: StorageGetOptions) => {
+    const get = async (options_: StorageGetOptions) => {
         libschema.assert(options_, StorageGetOptionsSchema);
         const schema = schemaList.find(s => s.type === options_.type);
         if (schema) {
@@ -317,7 +317,7 @@ export const createStorage = (options: StorageOptions): Storage => {
                 try {
                     const raw = await driver.read(path);
                     const json = JSON.parse(raw);
-                    const ret = libschema.assert<T>(json, schema.schema);
+                    const ret = libschema.assert(json, schema.schema);
                     return ret;
                 } catch (e) {
                     throw new Error(`failed to read payload "${options_.type}/${options_.name}": ${e.message}`);
