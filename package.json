@@ -14,7 +14,7 @@
         "typescript": "4.5.5"
     },
     "dependencies": {
-        "schema": "file:../schema",
+        "schema": "git://github.com/rok-star/schema#main",
         "redis": "4.0.3"
     }
 }
