@@ -34,7 +34,7 @@ exports.StorageCreateOptionsSchema = {
     props: {
         type: { type: 'string', matches: exports.TYPE_REGEXP },
         name: { type: 'string', matches: exports.NAME_REGEXP },
-        payload: { type: 'any' }
+        data: { type: 'any' }
     }
 };
 exports.StorageUpdateOptionsSchema = {
@@ -42,7 +42,7 @@ exports.StorageUpdateOptionsSchema = {
     props: {
         type: { type: 'string', matches: exports.TYPE_REGEXP },
         name: { type: 'string', matches: exports.NAME_REGEXP },
-        payload: { type: 'any' }
+        data: { type: 'any' }
     }
 };
 exports.StorageDeleteOptionsSchema = {
@@ -141,17 +141,17 @@ const createStorage = (options) => {
             const path = libpath.join(options_.type, options_.name);
             if ((yield driver.exists(path)) === false) {
                 try {
-                    const json = libschema.assert(options_.payload, schema.schema);
+                    const json = libschema.assert(options_.data, schema.schema);
                     const raw = JSON.stringify(json, null, 4);
                     yield driver.write(path, raw);
                     return json;
                 }
                 catch (e) {
-                    throw new Error(`failed to write payload "${options_.type}/${options_.name}": ${e.message}`);
+                    throw new Error(`failed to write data "${options_.type}/${options_.name}": ${e.message}`);
                 }
             }
             else {
-                throw new Error(`payload "${options_.type}/${options_.name}" already exists`);
+                throw new Error(`data "${options_.type}/${options_.name}" already exists`);
             }
         }
         else {
@@ -165,17 +165,17 @@ const createStorage = (options) => {
             const path = libpath.join(options_.type, options_.name);
             if ((yield driver.exists(path)) === true) {
                 try {
-                    const json = libschema.assert(options_.payload, schema.schema);
+                    const json = libschema.assert(options_.data, schema.schema);
                     const raw = JSON.stringify(json, null, 4);
                     yield driver.write(path, raw);
                     return json;
                 }
                 catch (e) {
-                    throw new Error(`failed to write payload "${options_.type}/${options_.name}": ${e.message}`);
+                    throw new Error(`failed to write data "${options_.type}/${options_.name}": ${e.message}`);
                 }
             }
             else {
-                throw new Error(`payload "${options_.type}/${options_.name}" not found`);
+                throw new Error(`data "${options_.type}/${options_.name}" not found`);
             }
         }
         else {
@@ -191,7 +191,7 @@ const createStorage = (options) => {
                 yield driver.delete(path);
             }
             else {
-                throw new Error(`payload "${options_.type}/${options_.name}" not found`);
+                throw new Error(`data "${options_.type}/${options_.name}" not found`);
             }
         }
         else {
@@ -222,7 +222,7 @@ const createStorage = (options) => {
                     return ret;
                 }
                 catch (e) {
-                    throw new Error(`failed to read payload "${options_.type}/${options_.name}": ${e.message}`);
+                    throw new Error(`failed to read data "${options_.type}/${options_.name}": ${e.message}`);
                 }
             }
             else {
@@ -256,11 +256,11 @@ const createStorage = (options) => {
                     return ret;
                 }
                 catch (e) {
-                    throw new Error(`failed to read payload "${options_.type}/${options_.name}": ${e.message}`);
+                    throw new Error(`failed to read data "${options_.type}/${options_.name}": ${e.message}`);
                 }
             }
             else {
-                throw new Error(`payload "${options_.type}/${options_.name}" not found`);
+                throw new Error(`data "${options_.type}/${options_.name}" not found`);
             }
         }
         else {

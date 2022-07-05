@@ -3,7 +3,7 @@ export declare const TYPE_REGEXP: RegExp;
 export declare const NAME_REGEXP: RegExp;
 export declare type StorageDriver = {
     readonly read: (path: string) => Promise<string>;
-    readonly write: (path: string, payload: string) => Promise<void>;
+    readonly write: (path: string, data: string) => Promise<void>;
     readonly delete: (path: string) => Promise<void>;
     readonly exists: (path: string) => Promise<boolean>;
     readonly list: (path: string) => Promise<string[]>;
@@ -20,13 +20,13 @@ export declare const StorageSchemaRemoveOptionsSchema: libschema.Schema<StorageS
 export declare type StorageCreateOptions<T = any> = {
     readonly type: string;
     readonly name: string;
-    readonly payload: T;
+    readonly data: T;
 };
 export declare const StorageCreateOptionsSchema: libschema.Schema<StorageCreateOptions>;
 export declare type StorageUpdateOptions<T = any> = {
     readonly type: string;
     readonly name: string;
-    readonly payload: T;
+    readonly data: T;
 };
 export declare const StorageUpdateOptionsSchema: libschema.Schema<StorageUpdateOptions>;
 export declare type StorageDeleteOptions = {

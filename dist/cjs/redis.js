@@ -34,9 +34,9 @@ const createRedisDriver = (options) => {
             yield ensureConnection();
             return ((_a = (yield redisClient.get(key))) !== null && _a !== void 0 ? _a : '');
         }),
-        write: (key, payload) => __awaiter(void 0, void 0, void 0, function* () {
+        write: (key, data) => __awaiter(void 0, void 0, void 0, function* () {
             yield ensureConnection();
-            redisClient.set(key, payload);
+            redisClient.set(key, data);
         }),
         delete: (key) => __awaiter(void 0, void 0, void 0, function* () {
             yield ensureConnection();

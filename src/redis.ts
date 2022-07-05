@@ -32,9 +32,9 @@ export const createRedisDriver = (options: RedisStorageDriverOptions): StorageDr
             await ensureConnection();
             return ((await redisClient.get(key)) ?? '');
         },
-        write: async (key: string, payload: string) => {
+        write: async (key: string, data: string) => {
             await ensureConnection();
-            redisClient.set(key, payload);
+            redisClient.set(key, data);
         },
         delete: async (key: string) => {
             await ensureConnection();

@@ -21,10 +21,10 @@ export const createLocalDriver = (options: LocalStorageDriverOptions): StorageDr
             const fullPath = libpath.join(options.basePath, path);
             return libfs.readFileSync(fullPath).toString();
         },
-        write: async (path: string, payload: string) => {
+        write: async (path: string, data: string) => {
             const fullPath = libpath.join(options.basePath, path);
             libfs.mkdirSync(libpath.dirname(fullPath), { recursive: true });
-            libfs.writeFileSync(fullPath, payload);
+            libfs.writeFileSync(fullPath, data);
         },
         delete: async (path: string) => {
             const fullPath = libpath.join(options.basePath, path);

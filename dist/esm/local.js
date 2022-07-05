@@ -23,10 +23,10 @@ export const createLocalDriver = (options) => {
             const fullPath = libpath.join(options.basePath, path);
             return libfs.readFileSync(fullPath).toString();
         }),
-        write: (path, payload) => __awaiter(void 0, void 0, void 0, function* () {
+        write: (path, data) => __awaiter(void 0, void 0, void 0, function* () {
             const fullPath = libpath.join(options.basePath, path);
             libfs.mkdirSync(libpath.dirname(fullPath), { recursive: true });
-            libfs.writeFileSync(fullPath, payload);
+            libfs.writeFileSync(fullPath, data);
         }),
         delete: (path) => __awaiter(void 0, void 0, void 0, function* () {
             const fullPath = libpath.join(options.basePath, path);

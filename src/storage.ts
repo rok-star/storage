@@ -8,7 +8,7 @@ export const NAME_REGEXP = /^[a-zA-Z0-9\.\-\_\@]+$/;
 
 export type StorageDriver = {
     readonly read: (path: string) => Promise<string>;
-    readonly write: (path: string, payload: string) => Promise<void>;
+    readonly write: (path: string, data: string) => Promise<void>;
     readonly delete: (path: string) => Promise<void>;
     readonly exists: (path: string) => Promise<boolean>;
     readonly list: (path: string) => Promise<string[]>;
@@ -41,7 +41,7 @@ export const StorageSchemaRemoveOptionsSchema: libschema.Schema<StorageSchemaRem
 export type StorageCreateOptions<T = any> = {
     readonly type: string;
     readonly name: string;
-    readonly payload: T;
+    readonly data: T;
 }
 
 export const StorageCreateOptionsSchema: libschema.Schema<StorageCreateOptions> = {
@@ -49,14 +49,14 @@ export const StorageCreateOptionsSchema: libschema.Schema<StorageCreateOptions> 
     props: {
         type: { type: 'string', matches: TYPE_REGEXP },
         name: { type: 'string', matches: NAME_REGEXP },
-        payload: { type: 'any' }
+        data: { type: 'any' }
     }
 }
 
 export type StorageUpdateOptions<T = any> = {
     readonly type: string;
     readonly name: string;
-    readonly payload: T;
+    readonly data: T;
 }
 
 export const StorageUpdateOptionsSchema: libschema.Schema<StorageUpdateOptions> = {
@@ -64,7 +64,7 @@ export const StorageUpdateOptionsSchema: libschema.Schema<StorageUpdateOptions> 
     props: {
         type: { type: 'string', matches: TYPE_REGEXP },
         name: { type: 'string', matches: NAME_REGEXP },
-        payload: { type: 'any' }
+        data: { type: 'any' }
     }
 }
 
@@ -219,15 +219,15 @@ export const createStorage = (options: StorageOptions): Storage => {
             const path = libpath.join(options_.type, options_.name);
             if ((await driver.exists(path)) === false) {
                 try {
-                    const json = libschema.assert<any>(options_.payload, schema.schema);
+                    const json = libschema.assert<any>(options_.data, schema.schema);
                     const raw = JSON.stringify(json, null, 4);
                     await driver.write(path, raw);
                     return json;
                 } catch (e) {
-                    throw new Error(`failed to write payload "${options_.type}/${options_.name}": ${e.message}`);
+                    throw new Error(`failed to write data "${options_.type}/${options_.name}": ${e.message}`);
                 }
             } else {
-                throw new Error(`payload "${options_.type}/${options_.name}" already exists`);
+                throw new Error(`data "${options_.type}/${options_.name}" already exists`);
             }
         } else {
             throw new Error(`schema "${options_.type}" not found`);
@@ -240,15 +240,15 @@ export const createStorage = (options: StorageOptions): Storage => {
             const path = libpath.join(options_.type, options_.name);
             if ((await driver.exists(path)) === true) {
                 try {
-                    const json = libschema.assert<any>(options_.payload, schema.schema);
+                    const json = libschema.assert<any>(options_.data, schema.schema);
                     const raw = JSON.stringify(json, null, 4);
                     await driver.write(path, raw);
                     return json;
                 } catch (e) {
-                    throw new Error(`failed to write payload "${options_.type}/${options_.name}": ${e.message}`);
+                    throw new Error(`failed to write data "${options_.type}/${options_.name}": ${e.message}`);
                 }
             } else {
-                throw new Error(`payload "${options_.type}/${options_.name}" not found`);
+                throw new Error(`data "${options_.type}/${options_.name}" not found`);
             }
         } else {
             throw new Error(`schema "${options_.type}" not found`);
@@ -262,7 +262,7 @@ export const createStorage = (options: StorageOptions): Storage => {
             if ((await driver.exists(path)) === true) {
                 await driver.delete(path);
             } else {
-                throw new Error(`payload "${options_.type}/${options_.name}" not found`);
+                throw new Error(`data "${options_.type}/${options_.name}" not found`);
             }
         } else {
             throw new Error(`schema "${options_.type}" not found`);
@@ -290,7 +290,7 @@ export const createStorage = (options: StorageOptions): Storage => {
                     const ret = libschema.assert(json, schema.schema);
                     return ret;
                 } catch (e) {
-                    throw new Error(`failed to read payload "${options_.type}/${options_.name}": ${e.message}`);
+                    throw new Error(`failed to read data "${options_.type}/${options_.name}": ${e.message}`);
                 }
             } else {
                 return undefined;
@@ -320,10 +320,10 @@ export const createStorage = (options: StorageOptions): Storage => {
                     const ret = libschema.assert(json, schema.schema);
                     return ret;
                 } catch (e) {
-                    throw new Error(`failed to read payload "${options_.type}/${options_.name}": ${e.message}`);
+                    throw new Error(`failed to read data "${options_.type}/${options_.name}": ${e.message}`);
                 }
             } else {
-                throw new Error(`payload "${options_.type}/${options_.name}" not found`);
+                throw new Error(`data "${options_.type}/${options_.name}" not found`);
             }
         } else {
             throw new Error(`schema "${options_.type}" not found`);
