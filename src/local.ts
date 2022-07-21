@@ -4,13 +4,13 @@ import * as libschema from 'schema'
 import { StorageDriver } from './storage'
 
 export type LocalStorageDriverOptions = {
-    readonly basePath: string;
+    readonly path: string;
 }
 
 export const LocalStorageDriverOptionsSchema: libschema.Schema = {
     type: 'object',
     props: {
-        basePath: { type: 'string' }
+        path: { type: 'string' }
     }
 }
 
@@ -18,24 +18,24 @@ export const createLocalDriver = (options: LocalStorageDriverOptions): StorageDr
     libschema.assert(options, LocalStorageDriverOptionsSchema);
     return {
         read: async (path: string) => {
-            const fullPath = libpath.join(options.basePath, path);
+            const fullPath = libpath.join(options.path, path);
             return libfs.readFileSync(fullPath).toString();
         },
         write: async (path: string, data: string) => {
-            const fullPath = libpath.join(options.basePath, path);
+            const fullPath = libpath.join(options.path, path);
             libfs.mkdirSync(libpath.dirname(fullPath), { recursive: true });
             libfs.writeFileSync(fullPath, data);
         },
         delete: async (path: string) => {
-            const fullPath = libpath.join(options.basePath, path);
+            const fullPath = libpath.join(options.path, path);
             libfs.unlinkSync(fullPath);
         },
         exists: async (path: string) => {
-            const fullPath = libpath.join(options.basePath, path);
+            const fullPath = libpath.join(options.path, path);
             return libfs.existsSync(fullPath);
         },
         list: async (path: string) => {
-            const fullPath = libpath.join(options.basePath, path);
+            const fullPath = libpath.join(options.path, path);
             return (libfs.existsSync(fullPath) ? libfs.readdirSync(fullPath) : []);
         }
     }

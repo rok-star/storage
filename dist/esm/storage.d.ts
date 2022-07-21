@@ -69,7 +69,7 @@ export declare type Storage = {
 export declare type StorageOptions = {
     readonly driver: {
         readonly type: 'local';
-        readonly basePath: string;
+        readonly path: string;
     } | {
         readonly type: 'redis';
         readonly host: string;

@@ -83,7 +83,7 @@ export const StorageOptionsSchema = {
             type: 'object',
             props: {
                 type: { type: 'string', oneOf: ['local', 'redis'] },
-                basePath: { type: 'string', optional: true },
+                path: { type: 'string', optional: true },
                 host: { type: 'string', optional: true },
                 port: { type: 'number', optional: true },
                 username: { type: 'string', optional: true },
@@ -98,7 +98,7 @@ export const createStorage = (options) => {
     libschema.assert(options, StorageOptionsSchema);
     const driver = (() => {
         if (options.driver.type === 'local') {
-            return createLocalDriver({ basePath: options.driver.basePath });
+            return createLocalDriver({ path: options.driver.path });
         }
         else if (options.driver.type === 'redis') {
             return createRedisDriver({
